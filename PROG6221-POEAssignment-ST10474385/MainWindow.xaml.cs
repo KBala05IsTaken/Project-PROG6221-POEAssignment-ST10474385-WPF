@@ -142,10 +142,40 @@ namespace PROG6221_POEAssignment_ST10474385
                 "and other dangerous websites across desktop and mobile platforms.";
         }
 
-        // Keyword Recognition + Random Responses + Conversation Flow
+        // Keyword Recognition + Random Responses + Conversation Flow + Sentiment Detection
         private void AskAI_Click(object sender, RoutedEventArgs e)
         {
             string question = txtQuestion.Text.ToLower();
+
+            // SENTIMENT DETECTION
+            string sentimentResponse = "";
+
+            if (question.Contains("worried") ||
+                question.Contains("scared") ||
+                question.Contains("afraid") ||
+                question.Contains("nervous"))
+            {
+                sentimentResponse =
+                    "It's completely understandable to feel that way. " +
+                    "Cyber threats can be very convincing, but staying informed helps you stay safe.\n\n";
+            }
+
+            else if (question.Contains("frustrated") ||
+                     question.Contains("confused") ||
+                     question.Contains("overwhelmed"))
+            {
+                sentimentResponse =
+                    "I understand that cybersecurity can feel overwhelming at times. " +
+                    "Don't worry — I'll keep things simple and help you step by step.\n\n";
+            }
+
+            else if (question.Contains("curious") ||
+                     question.Contains("interested"))
+            {
+                sentimentResponse =
+                    "I’m glad you’re curious about cybersecurity! " +
+                    "Learning about online safety is a great way to protect yourself.\n\n";
+            }
 
             // PASSWORD
             if (question.Contains("password"))
@@ -154,6 +184,7 @@ namespace PROG6221_POEAssignment_ST10474385
                 favouriteTopic = "password safety";
 
                 txtOutput.Text =
+                    sentimentResponse +
                     passwordResponses[random.Next(passwordResponses.Count)];
             }
 
@@ -164,6 +195,7 @@ namespace PROG6221_POEAssignment_ST10474385
                 favouriteTopic = "scam protection";
 
                 txtOutput.Text =
+                    sentimentResponse +
                     scamResponses[random.Next(scamResponses.Count)];
             }
 
@@ -174,6 +206,7 @@ namespace PROG6221_POEAssignment_ST10474385
                 favouriteTopic = "privacy";
 
                 txtOutput.Text =
+                    sentimentResponse +
                     privacyResponses[random.Next(privacyResponses.Count)];
             }
 
@@ -184,6 +217,7 @@ namespace PROG6221_POEAssignment_ST10474385
                 favouriteTopic = "phishing awareness";
 
                 txtOutput.Text =
+                    sentimentResponse +
                     phishingResponses[random.Next(phishingResponses.Count)];
             }
 
@@ -194,6 +228,7 @@ namespace PROG6221_POEAssignment_ST10474385
                 favouriteTopic = "safe browsing";
 
                 txtOutput.Text =
+                    sentimentResponse +
                     browsingResponses[random.Next(browsingResponses.Count)];
             }
 
@@ -228,6 +263,7 @@ namespace PROG6221_POEAssignment_ST10474385
             else
             {
                 txtOutput.Text =
+                    sentimentResponse +
                     "Sorry, I could not understand that topic. " +
                     "Try asking about passwords, scams, privacy, phishing, or safe browsing.";
             }
