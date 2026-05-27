@@ -1,0 +1,150 @@
+﻿<Window x:Class="PROG6221_POEAssignment_ST10474385.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AI Assistant" Height="600" Width="1000"
+        Background="#1E1E1E">
+
+    <Grid Margin="20">
+
+        <StackPanel>
+
+            <!-- Title -->
+            <!-- ASCII Title -->
+            <TextBlock FontFamily="Consolas"
+           FontSize="16"
+           FontWeight="Bold"
+           Foreground="DodgerBlue"
+           HorizontalAlignment="Center"
+           TextAlignment="Center"
+           Margin="0,0,0,20"
+           xml:space="preserve"
+           Text="
+    _    ___      _           _        _   
+   / \  |_ _|    / \   ___ __(_)___   / |_ 
+  / _ \  | |    / _ \ / __/ __| / __| | __|
+ / ___ \ | |   / ___ \ (_| (__| \__ \ | |_ 
+/_/   \_\___| /_/   \_\___\___|_|___/  \__|
+
+              AI Assistant"/>
+
+            <!-- Name Input -->
+            <TextBlock Text="What is your name?"
+                       Foreground="White"
+                       FontSize="16" RenderTransformOrigin="0.501,3.307" Height="2">
+                <TextBlock.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+
+            <TextBox x:Name="txtName"
+                     Height="30"
+                     Margin="0,5,0,15"/>
+
+            <Button Content="Submit Name"
+                    Height="35"
+                    Click="SubmitName_Click"
+                    Background="DodgerBlue"
+                    Foreground="White"
+                    Margin="0,0,0,20"/>
+
+            <!-- Main Menu -->
+            <TextBlock Text="Choose an option:"
+                       Foreground="White"
+                       FontSize="18"
+                       Margin="0,0,0,10"/>
+
+            <WrapPanel Margin="0,0,0,20">
+
+                <Button Content="How do you feel?"
+                        Width="180"
+                        Height="40"
+                        Margin="5"
+                        Click="Feel_Click"/>
+
+                <Button Content="What is your purpose?"
+                        Width="180"
+                        Height="40"
+                        Margin="5"
+                        Click="Purpose_Click"/>
+
+                <Button Content="Cybersecurity Topics"
+                        Width="180"
+                        Height="40"
+                        Margin="5"
+                        Click="Cyber_Click"/>
+
+            </WrapPanel>
+
+            <!-- Cybersecurity Buttons -->
+            <StackPanel x:Name="CyberPanel"
+                        Visibility="Collapsed">
+
+                <TextBlock Text="Cybersecurity Topics"
+                           Foreground="Yellow"
+                           FontSize="18"
+                           Margin="0,0,0,10"/>
+
+                <WrapPanel>
+
+                    <Button Content="Password Safety"
+                            Width="160"
+                            Height="35"
+                            Margin="5"
+                            Click="Password_Click"/>
+
+                    <Button Content="Phishing"
+                            Width="160"
+                            Height="35"
+                            Margin="5"
+                            Click="Phishing_Click"/>
+
+                    <Button Content="Safe Browsing"
+                            Width="160"
+                            Height="35"
+                            Margin="5"
+                            Click="Browsing_Click"/>
+
+                </WrapPanel>
+            </StackPanel>
+
+            <!-- Keyword Recognition -->
+            <TextBlock Text="Ask me something about cybersecurity:"
+           Foreground="White"
+           FontSize="16"
+           Margin="0,20,0,5"/>
+
+            <TextBox x:Name="txtQuestion"
+         Height="30"
+         Margin="0,0,0,10"/>
+
+            <Button Content="Ask AI"
+        Width="120"
+        Height="35"
+        Background="Orange"
+        Foreground="White"
+        Click="AskAI_Click"
+        Margin="0,0,0,20"/>
+
+            <!-- Output Area -->
+            <TextBlock Text="Assistant Response:"
+                       Foreground="White"
+                       FontSize="16"
+                       Margin="0,20,0,5"/>
+
+            <TextBox x:Name="txtOutput"
+                     Height="180"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     IsReadOnly="True"
+                     VerticalScrollBarVisibility="Auto"
+                     Background="#2D2D30"
+                     Foreground="LightBlue"/>
+
+        </StackPanel>
+    </Grid>
+</Window>
