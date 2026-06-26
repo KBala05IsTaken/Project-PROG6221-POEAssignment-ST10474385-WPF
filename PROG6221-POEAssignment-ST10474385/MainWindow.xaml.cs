@@ -27,6 +27,9 @@ namespace PROG6221_POEAssignment_ST10474385
         // Memory variables
         string favouriteTopic = "";
 
+        // Task / Reminder memory
+        List<string> userTasks = new List<string>();
+
         // Password responses
         List<string> passwordResponses = new List<string>()
         {
@@ -147,168 +150,259 @@ namespace PROG6221_POEAssignment_ST10474385
         {
             string question = txtQuestion.Text.ToLower();
 
-            // SENTIMENT DETECTION
             string sentimentResponse = "";
 
+
+            // SENTIMENT DETECTION
             if (question.Contains("worried") ||
                 question.Contains("scared") ||
                 question.Contains("afraid") ||
                 question.Contains("nervous"))
             {
                 sentimentResponse =
-                    "It's completely understandable to feel that way. " +
-                    "Cyber threats can be very convincing, but staying informed helps you stay safe.\n\n";
+                "It's understandable to feel that way. Cyber threats can be convincing, " +
+                "but learning about cybersecurity keeps you safer.\n\n";
             }
 
-            else if (question.Contains("frustrated") ||
-                     question.Contains("confused") ||
-                     question.Contains("overwhelmed"))
+
+            else if (question.Contains("confused") ||
+                     question.Contains("frustrated"))
             {
                 sentimentResponse =
-                    "I understand that cybersecurity can feel overwhelming at times. " +
-                    "Don't worry — I'll keep things simple and help you step by step.\n\n";
+                "Cybersecurity can feel complicated, but I will explain it step by step.\n\n";
             }
 
-            else if (question.Contains("curious") ||
-                     question.Contains("interested"))
+
+
+            // ============================
+            // TASK / REMINDER NLP
+            // ============================
+
+            if (question.Contains("task") ||
+               question.Contains("remind") ||
+               question.Contains("reminder"))
             {
-                sentimentResponse =
-                    "I’m glad you’re curious about cybersecurity! " +
-                    "Learning about online safety is a great way to protect yourself.\n\n";
+
+                string task = ExtractTask(question);
+
+
+                if (!string.IsNullOrWhiteSpace(task))
+                {
+
+                    userTasks.Add(task);
+
+
+                    txtOutput.Text =
+                    $"Task added: '{task}'. " +
+                    "Would you like to set a reminder for this task?";
+
+                }
+
+                else
+                {
+
+                    txtOutput.Text =
+                    "I detected a task request, but I could not understand the task.";
+
+                }
+
+
+                return;
             }
+
+
+
+            // SHOW TASK HISTORY
+
+            if (question.Contains("what have you done") ||
+               question.Contains("show tasks") ||
+               question.Contains("my tasks") ||
+               question.Contains("summary"))
+            {
+
+
+                if (userTasks.Count == 0)
+                {
+
+                    txtOutput.Text =
+                    "I have not added any tasks yet.";
+
+                }
+
+                else
+                {
+
+                    StringBuilder summary = new StringBuilder();
+
+                    summary.AppendLine("Here is a summary of recent actions:");
+
+                    for (int i = 0; i < userTasks.Count; i++)
+                    {
+
+                        summary.AppendLine(
+                        $"{i + 1}. Task added: '{userTasks[i]}'");
+
+                    }
+
+
+                    txtOutput.Text = summary.ToString();
+
+                }
+
+
+                return;
+
+            }
+
+
+
 
             // PASSWORD
             if (question.Contains("password"))
             {
+
                 currentTopic = "password";
+
                 favouriteTopic = "password safety";
 
-                txtOutput.Text =
-                    sentimentResponse +
-                    passwordResponses[random.Next(passwordResponses.Count)];
-            }
-
-            // SCAM
-            else if (question.Contains("scam"))
-            {
-                currentTopic = "scam";
-                favouriteTopic = "scam protection";
 
                 txtOutput.Text =
-                    sentimentResponse +
-                    scamResponses[random.Next(scamResponses.Count)];
+                sentimentResponse +
+                passwordResponses[random.Next(passwordResponses.Count)];
+
             }
 
-            // PRIVACY
-            else if (question.Contains("privacy"))
-            {
-                currentTopic = "privacy";
-                favouriteTopic = "privacy";
 
-                txtOutput.Text =
-                    sentimentResponse +
-                    privacyResponses[random.Next(privacyResponses.Count)];
-            }
 
             // PHISHING
             else if (question.Contains("phishing"))
             {
+
                 currentTopic = "phishing";
+
                 favouriteTopic = "phishing awareness";
 
+
                 txtOutput.Text =
-                    sentimentResponse +
-                    phishingResponses[random.Next(phishingResponses.Count)];
+                sentimentResponse +
+                phishingResponses[random.Next(phishingResponses.Count)];
+
             }
 
-            // SAFE BROWSING
-            else if (question.Contains("browsing") || question.Contains("safe browsing"))
+
+
+            // PRIVACY
+
+            else if (question.Contains("privacy"))
             {
+
+                currentTopic = "privacy";
+
+                favouriteTopic = "privacy";
+
+
+                txtOutput.Text =
+                sentimentResponse +
+                privacyResponses[random.Next(privacyResponses.Count)];
+
+            }
+
+
+
+
+            // SCAM
+
+            else if (question.Contains("scam"))
+            {
+
+                currentTopic = "scam";
+
+                favouriteTopic = "scam protection";
+
+
+                txtOutput.Text =
+                sentimentResponse +
+                scamResponses[random.Next(scamResponses.Count)];
+
+            }
+
+
+
+
+            // BROWSING
+
+            else if (question.Contains("browser") ||
+                    question.Contains("browsing"))
+            {
+
                 currentTopic = "browsing";
+
                 favouriteTopic = "safe browsing";
 
+
                 txtOutput.Text =
-                    sentimentResponse +
-                    browsingResponses[random.Next(browsingResponses.Count)];
+                sentimentResponse +
+                browsingResponses[random.Next(browsingResponses.Count)];
+
             }
 
-            // FOLLOW-UP QUESTIONS
-            else if (question.Contains("more") ||
-                     question.Contains("another") ||
-                     question.Contains("explain"))
-            {
-                HandleFollowUp();
-            }
 
-            // MEMORY RECALL
-            else if (question.Contains("remember") ||
-                     question.Contains("my favourite topic") ||
-                     question.Contains("what do i like"))
-            {
-                if (!string.IsNullOrEmpty(favouriteTopic))
-                {
-                    txtOutput.Text =
-                        $"{sName}, I remember that you're interested in {favouriteTopic}. " +
-                        $"It's an important part of staying safe online!";
-                }
-                else
-                {
-                    txtOutput.Text =
-                        "I don't know your favourite cybersecurity topic yet. " +
-                        "Ask me about one first!";
-                }
-            }
 
-            // UNKNOWN QUESTION
             else
             {
+
                 txtOutput.Text =
-                    sentimentResponse +
-                    "Sorry, I could not understand that topic. " +
-                    "Try asking about passwords, scams, privacy, phishing, or safe browsing.";
+                sentimentResponse +
+                "I did not understand. Try asking about passwords, phishing, privacy, or tasks.";
+
             }
+
         }
 
-        // Handles follow-up questions
-        private void HandleFollowUp()
+        private string ExtractTask(string input)
         {
-            switch (currentTopic)
+
+            string task = input;
+
+
+            // Remove common command words
+
+            task = task.Replace("remind me to", "");
+            task = task.Replace("remind me", "");
+            task = task.Replace("add a task to", "");
+            task = task.Replace("add task", "");
+            task = task.Replace("create a task", "");
+            task = task.Replace("set a reminder for", "");
+            task = task.Replace("task", "");
+
+
+
+            // Remove time words
+
+            task = task.Replace("tomorrow", "");
+            task = task.Replace("today", "");
+            task = task.Replace("later", "");
+
+
+
+            task = task.Trim();
+
+
+
+            // Capitalise first letter
+
+            if (task.Length > 0)
             {
-                case "password":
-                    txtOutput.Text =
-                    $"{sName}, since you're interested in passwords: " +
-                    passwordResponses[random.Next(passwordResponses.Count)];
-                    break;
 
-                case "scam":
-                    txtOutput.Text =
-                    $"{sName}, since you're interested in scams: " +
-                    scamResponses[random.Next(scamResponses.Count)];
-                    break;
+                task =
+                char.ToUpper(task[0]) +
+                task.Substring(1);
 
-                case "privacy":
-                    txtOutput.Text =
-                    $"{sName}, since you're interested in privacy: " +
-                    privacyResponses[random.Next(privacyResponses.Count)];
-                    break;
-
-                case "phishing":
-                    txtOutput.Text =
-                    $"{sName}, since you're interested in phishing: " +
-                    phishingResponses[random.Next(phishingResponses.Count)];
-                    break;
-
-                case "browsing":
-                    txtOutput.Text =
-                    $"{sName}, since you're interested in browsing: " +
-                    browsingResponses[random.Next(browsingResponses.Count)];
-                    break;
-
-                default:
-                    txtOutput.Text =
-                        "Please ask about a cybersecurity topic first.";
-                    break;
             }
+
+
+            return task;
+
         }
 
         // QUIZ VARIABLES
@@ -384,8 +478,8 @@ namespace PROG6221_POEAssignment_ST10474385
         "True or False: HTTPS websites are usually safer.",
         new string[]
         {
-        "True",
-        "False"
+            "True",
+            "False"
         },0),
 
 
@@ -393,10 +487,10 @@ namespace PROG6221_POEAssignment_ST10474385
         "Which should you avoid clicking?",
         new string[]
         {
-        "Trusted links",
-        "Unknown links",
-        "Your bookmarks",
-        "School websites"
+            "Trusted links",
+            "Unknown links",
+            "Your bookmarks",
+            "School websites"
         },1),
 
 
@@ -404,10 +498,10 @@ namespace PROG6221_POEAssignment_ST10474385
         "What helps protect online accounts?",
         new string[]
         {
-        "Two-factor authentication",
-        "Sharing passwords",
-        "Using simple passwords",
-        "Disabling security"
+            "Two-factor authentication",
+            "Sharing passwords",
+            "Using simple passwords",
+            "Disabling security"
         },0),
 
 
@@ -415,10 +509,10 @@ namespace PROG6221_POEAssignment_ST10474385
         "Malware is:",
         new string[]
         {
-        "A type of food",
-        "A harmful program",
-        "A password",
-        "A browser"
+            "A type of food",
+            "A harmful program",
+            "A password",
+            "A browser"
         },1),
 
 
@@ -426,8 +520,8 @@ namespace PROG6221_POEAssignment_ST10474385
         "True or False: You should install updates regularly.",
         new string[]
         {
-        "True",
-        "False"
+            "True",
+            "False"
         },0),
 
 
