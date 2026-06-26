@@ -30,6 +30,9 @@ namespace PROG6221_POEAssignment_ST10474385
         // Task / Reminder memory
         List<string> userTasks = new List<string>();
 
+        // Activity Log
+        List<string> activityLog = new List<string>();
+
         // Password responses
         List<string> passwordResponses = new List<string>()
         {
@@ -152,6 +155,15 @@ namespace PROG6221_POEAssignment_ST10474385
 
             string sentimentResponse = "";
 
+            // ACTIVITY LOG COMMAND
+            if (question.Contains("show activity log") ||
+               question.Contains("what have you done") ||
+               question.Contains("recent actions") ||
+               question.Contains("my activity"))
+            {
+                ShowActivityLog();
+                return;
+            }
 
             // SENTIMENT DETECTION
             if (question.Contains("worried") ||
@@ -173,7 +185,6 @@ namespace PROG6221_POEAssignment_ST10474385
             }
 
 
-
             // ============================
             // TASK / REMINDER NLP
             // ============================
@@ -185,188 +196,118 @@ namespace PROG6221_POEAssignment_ST10474385
 
                 string task = ExtractTask(question);
 
-
                 if (!string.IsNullOrWhiteSpace(task))
                 {
-
                     userTasks.Add(task);
+                    AddActivity($"Task added: '{task}'");
 
-
-                    txtOutput.Text =
-                    $"Task added: '{task}'. " +
-                    "Would you like to set a reminder for this task?";
-
+                    txtOutput.Text = $"Task added: '{task}'. " + "Would you like to set a reminder for this task?";
                 }
-
                 else
                 {
-
-                    txtOutput.Text =
-                    "I detected a task request, but I could not understand the task.";
-
+                    txtOutput.Text = "I detected a task request, but I could not understand the task.";
                 }
-
 
                 return;
             }
 
-
-
             // SHOW TASK HISTORY
-
             if (question.Contains("what have you done") ||
                question.Contains("show tasks") ||
                question.Contains("my tasks") ||
                question.Contains("summary"))
             {
-
-
                 if (userTasks.Count == 0)
                 {
-
-                    txtOutput.Text =
-                    "I have not added any tasks yet.";
-
+                    txtOutput.Text = "I have not added any tasks yet.";
                 }
-
                 else
                 {
-
                     StringBuilder summary = new StringBuilder();
-
                     summary.AppendLine("Here is a summary of recent actions:");
-
                     for (int i = 0; i < userTasks.Count; i++)
                     {
-
                         summary.AppendLine(
                         $"{i + 1}. Task added: '{userTasks[i]}'");
-
                     }
 
-
                     txtOutput.Text = summary.ToString();
-
                 }
 
-
                 return;
-
             }
-
-
-
 
             // PASSWORD
             if (question.Contains("password"))
             {
-
+                AddActivity("NLP request detected: Password information requested");
                 currentTopic = "password";
-
                 favouriteTopic = "password safety";
-
 
                 txtOutput.Text =
                 sentimentResponse +
                 passwordResponses[random.Next(passwordResponses.Count)];
-
             }
-
-
 
             // PHISHING
             else if (question.Contains("phishing"))
             {
-
+                AddActivity("NLP request detected: Phishing information requested");
                 currentTopic = "phishing";
-
                 favouriteTopic = "phishing awareness";
-
 
                 txtOutput.Text =
                 sentimentResponse +
                 phishingResponses[random.Next(phishingResponses.Count)];
-
             }
 
-
-
             // PRIVACY
-
             else if (question.Contains("privacy"))
             {
-
+                AddActivity("NLP request detected: Privacy information requested");
                 currentTopic = "privacy";
-
                 favouriteTopic = "privacy";
-
 
                 txtOutput.Text =
                 sentimentResponse +
                 privacyResponses[random.Next(privacyResponses.Count)];
-
             }
 
-
-
-
             // SCAM
-
             else if (question.Contains("scam"))
             {
-
+                AddActivity("NLP request detected: Scam information requested");
                 currentTopic = "scam";
-
                 favouriteTopic = "scam protection";
-
 
                 txtOutput.Text =
                 sentimentResponse +
                 scamResponses[random.Next(scamResponses.Count)];
-
             }
 
-
-
-
             // BROWSING
-
-            else if (question.Contains("browser") ||
-                    question.Contains("browsing"))
+            else if (question.Contains("browser") || question.Contains("browsing"))
             {
-
+                AddActivity("NLP request detected: Browsing information requested");
                 currentTopic = "browsing";
-
                 favouriteTopic = "safe browsing";
-
 
                 txtOutput.Text =
                 sentimentResponse +
                 browsingResponses[random.Next(browsingResponses.Count)];
-
             }
-
-
-
             else
             {
-
                 txtOutput.Text =
                 sentimentResponse +
                 "I did not understand. Try asking about passwords, phishing, privacy, or tasks.";
-
             }
-
         }
 
         private string ExtractTask(string input)
         {
-
             string task = input;
-
-
             // Remove common command words
-
             task = task.Replace("remind me to", "");
             task = task.Replace("remind me", "");
             task = task.Replace("add a task to", "");
@@ -375,49 +316,34 @@ namespace PROG6221_POEAssignment_ST10474385
             task = task.Replace("set a reminder for", "");
             task = task.Replace("task", "");
 
-
-
             // Remove time words
-
             task = task.Replace("tomorrow", "");
             task = task.Replace("today", "");
             task = task.Replace("later", "");
-
-
-
             task = task.Trim();
 
-
-
             // Capitalise first letter
-
             if (task.Length > 0)
             {
-
                 task =
                 char.ToUpper(task[0]) +
                 task.Substring(1);
-
             }
 
-
             return task;
-
         }
 
+        //----------------
         // QUIZ VARIABLES
-
+        //-------------
         int quizIndex = 0;
-
         int score = 0;
-
 
         class QuizQuestion
         {
             public string Question;
             public string[] Answers;
             public int CorrectAnswer;
-
 
             public QuizQuestion(string q, string[] a, int c)
             {
@@ -426,8 +352,6 @@ namespace PROG6221_POEAssignment_ST10474385
                 CorrectAnswer = c;
             }
         }
-
-
 
         List<QuizQuestion> quizQuestions = new List<QuizQuestion>()
         {
@@ -539,111 +463,64 @@ namespace PROG6221_POEAssignment_ST10474385
 
         private void Quiz_Click(object sender, RoutedEventArgs e)
         {
+            AddActivity("Quiz started");
 
             QuizPanel.Visibility = Visibility.Visible;
-
             CyberPanel.Visibility = Visibility.Collapsed;
-
 
             quizIndex = 0;
             score = 0;
 
-
             txtScore.Text = "Score: 0";
-
-
             LoadQuestion();
-
         }
 
         private void LoadQuestion()
         {
-
             AnswerPanel.Children.Clear();
-
 
             if (quizIndex >= quizQuestions.Count)
             {
-
                 FinishQuiz();
-
                 return;
-
             }
 
-
             QuizQuestion q = quizQuestions[quizIndex];
-
-
-            txtQuizQuestion.Text =
-                $"Question {quizIndex + 1}/{quizQuestions.Count}\n\n{q.Question}";
-
+            txtQuizQuestion.Text =$"Question {quizIndex + 1}/{quizQuestions.Count}\n\n{q.Question}";
 
             for (int i = 0; i < q.Answers.Length; i++)
             {
-
                 Button answer = new Button();
-
                 answer.Content = q.Answers[i];
-
                 answer.Tag = i;
 
-
                 answer.Margin = new Thickness(5);
-
                 answer.Height = 35;
-
-
                 answer.Click += Answer_Click;
 
-
                 AnswerPanel.Children.Add(answer);
-
             }
 
-
             btnNext.Visibility = Visibility.Collapsed;
-
         }
 
         private void Answer_Click(object sender, RoutedEventArgs e)
         {
-
-
             Button clicked = sender as Button;
-
-
-            int selected =
-                (int)clicked.Tag;
-
-
-            QuizQuestion q =
-                quizQuestions[quizIndex];
-
+            int selected = (int)clicked.Tag;
+            QuizQuestion q = quizQuestions[quizIndex];
 
             if (selected == q.CorrectAnswer)
             {
-
                 score++;
-
-
-                txtOutput.Text =
-                "Correct! Great cybersecurity knowledge.";
-
+                txtOutput.Text = "Correct! Great cybersecurity knowledge.";
             }
-
             else
             {
-
-                txtOutput.Text =
-                $"Incorrect. Correct answer: {q.Answers[q.CorrectAnswer]}";
-
+                txtOutput.Text = $"Incorrect. Correct answer: {q.Answers[q.CorrectAnswer]}";
             }
 
-
-
-            txtScore.Text =
-                $"Score: {score}";
+            txtScore.Text = $"Score: {score}";
 
 
             foreach (Button b in AnswerPanel.Children)
@@ -651,65 +528,79 @@ namespace PROG6221_POEAssignment_ST10474385
                 b.IsEnabled = false;
             }
 
-
-            btnNext.Visibility =
-                Visibility.Visible;
-
-
+            btnNext.Visibility = Visibility.Visible;
         }
 
         private void NextQuestion_Click(object sender, RoutedEventArgs e)
         {
-
             quizIndex++;
-
             LoadQuestion();
-
         }
 
         private void FinishQuiz()
         {
-
-            QuizPanel.Visibility =
-                Visibility.Visible;
-
-
+            AddActivity($"Quiz completed. Score: {score}/{quizQuestions.Count}");
+            QuizPanel.Visibility = Visibility.Visible;
             AnswerPanel.Children.Clear();
-
-
-            txtQuizQuestion.Text =
-                $"Quiz Complete!\n\nFinal Score: {score}/{quizQuestions.Count}";
-
-
-            btnNext.Visibility =
-                Visibility.Collapsed;
-
-
+            txtQuizQuestion.Text = $"Quiz Complete!\n\nFinal Score: {score}/{quizQuestions.Count}";
+            btnNext.Visibility = Visibility.Collapsed;
 
             if (score >= 8)
             {
-
                 txtOutput.Text =
                 "Excellent work! You're a cybersecurity pro!";
-
             }
 
             else if (score >= 5)
             {
-
                 txtOutput.Text =
                 "Good job! Keep learning to stay safe online.";
-
             }
 
             else
             {
-
                 txtOutput.Text =
                 "Keep practicing cybersecurity skills to improve.";
+            }
+        }
 
+        //------------------
+        //ACTIVITY LOG
+        //------------------
+
+        //This stores actions with timestamps.
+        private void AddActivity(string action)
+        {
+            string timestamp = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+            activityLog.Add($"{timestamp} - {action}");
+        }
+
+        //Displays the activity log
+        private void ShowActivityLog()
+        {
+            if (activityLog.Count == 0)
+            {
+                txtOutput.Text =
+                "No activity has been recorded yet.";
+
+                return;
             }
 
+            StringBuilder log = new StringBuilder();
+
+            log.AppendLine("Here's a summary of recent actions:\n");
+
+            // Display only last 10 actions
+            int start = Math.Max(0, activityLog.Count - 10);
+            int number = 1;
+
+            for (int i = start; i < activityLog.Count; i++)
+            {
+                log.AppendLine(
+                $"{number}. {activityLog[i]}");
+                number++;
+            }
+            txtOutput.Text = log.ToString();
         }
     }
 }
