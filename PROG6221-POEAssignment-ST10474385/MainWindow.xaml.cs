@@ -310,5 +310,312 @@ namespace PROG6221_POEAssignment_ST10474385
                     break;
             }
         }
+
+        // QUIZ VARIABLES
+
+        int quizIndex = 0;
+
+        int score = 0;
+
+
+        class QuizQuestion
+        {
+            public string Question;
+            public string[] Answers;
+            public int CorrectAnswer;
+
+
+            public QuizQuestion(string q, string[] a, int c)
+            {
+                Question = q;
+                Answers = a;
+                CorrectAnswer = c;
+            }
+        }
+
+
+
+        List<QuizQuestion> quizQuestions = new List<QuizQuestion>()
+        {
+
+        new QuizQuestion(
+        "What should you do if you receive a suspicious email asking for your password?",
+        new string[]
+        {
+            "Reply with password",
+            "Delete immediately",
+            "Report it as phishing",
+            "Ignore it"
+        },2),
+
+
+        new QuizQuestion(
+        "True or False: Using the same password everywhere is safe.",
+        new string[]
+        {
+            "True",
+            "False"
+        },1),
+
+
+        new QuizQuestion(
+        "Which makes a password stronger?",
+        new string[]
+        {
+            "Your birthday",
+            "Short words",
+            "Numbers and symbols",
+            "Your name"
+        },2),
+
+
+        new QuizQuestion(
+        "What does phishing attempt to steal?",
+        new string[]
+        {
+            "Sensitive information",
+            "Computer speed",
+            "Internet data",
+            "Battery power"
+        },0),
+
+
+        new QuizQuestion(
+        "True or False: HTTPS websites are usually safer.",
+        new string[]
+        {
+        "True",
+        "False"
+        },0),
+
+
+        new QuizQuestion(
+        "Which should you avoid clicking?",
+        new string[]
+        {
+        "Trusted links",
+        "Unknown links",
+        "Your bookmarks",
+        "School websites"
+        },1),
+
+
+        new QuizQuestion(
+        "What helps protect online accounts?",
+        new string[]
+        {
+        "Two-factor authentication",
+        "Sharing passwords",
+        "Using simple passwords",
+        "Disabling security"
+        },0),
+
+
+        new QuizQuestion(
+        "Malware is:",
+        new string[]
+        {
+        "A type of food",
+        "A harmful program",
+        "A password",
+        "A browser"
+        },1),
+
+
+        new QuizQuestion(
+        "True or False: You should install updates regularly.",
+        new string[]
+        {
+        "True",
+        "False"
+        },0),
+
+
+        new QuizQuestion(
+        "Safe browsing means:",
+        new string[]
+        {
+            "Visiting random websites",
+            "Protecting yourself online",
+            "Downloading everything",
+            "Sharing private details"
+        },1)
+
+        };
+
+        private void Quiz_Click(object sender, RoutedEventArgs e)
+        {
+
+            QuizPanel.Visibility = Visibility.Visible;
+
+            CyberPanel.Visibility = Visibility.Collapsed;
+
+
+            quizIndex = 0;
+            score = 0;
+
+
+            txtScore.Text = "Score: 0";
+
+
+            LoadQuestion();
+
+        }
+
+        private void LoadQuestion()
+        {
+
+            AnswerPanel.Children.Clear();
+
+
+            if (quizIndex >= quizQuestions.Count)
+            {
+
+                FinishQuiz();
+
+                return;
+
+            }
+
+
+            QuizQuestion q = quizQuestions[quizIndex];
+
+
+            txtQuizQuestion.Text =
+                $"Question {quizIndex + 1}/{quizQuestions.Count}\n\n{q.Question}";
+
+
+            for (int i = 0; i < q.Answers.Length; i++)
+            {
+
+                Button answer = new Button();
+
+                answer.Content = q.Answers[i];
+
+                answer.Tag = i;
+
+
+                answer.Margin = new Thickness(5);
+
+                answer.Height = 35;
+
+
+                answer.Click += Answer_Click;
+
+
+                AnswerPanel.Children.Add(answer);
+
+            }
+
+
+            btnNext.Visibility = Visibility.Collapsed;
+
+        }
+
+        private void Answer_Click(object sender, RoutedEventArgs e)
+        {
+
+
+            Button clicked = sender as Button;
+
+
+            int selected =
+                (int)clicked.Tag;
+
+
+            QuizQuestion q =
+                quizQuestions[quizIndex];
+
+
+            if (selected == q.CorrectAnswer)
+            {
+
+                score++;
+
+
+                txtOutput.Text =
+                "Correct! Great cybersecurity knowledge.";
+
+            }
+
+            else
+            {
+
+                txtOutput.Text =
+                $"Incorrect. Correct answer: {q.Answers[q.CorrectAnswer]}";
+
+            }
+
+
+
+            txtScore.Text =
+                $"Score: {score}";
+
+
+            foreach (Button b in AnswerPanel.Children)
+            {
+                b.IsEnabled = false;
+            }
+
+
+            btnNext.Visibility =
+                Visibility.Visible;
+
+
+        }
+
+        private void NextQuestion_Click(object sender, RoutedEventArgs e)
+        {
+
+            quizIndex++;
+
+            LoadQuestion();
+
+        }
+
+        private void FinishQuiz()
+        {
+
+            QuizPanel.Visibility =
+                Visibility.Visible;
+
+
+            AnswerPanel.Children.Clear();
+
+
+            txtQuizQuestion.Text =
+                $"Quiz Complete!\n\nFinal Score: {score}/{quizQuestions.Count}";
+
+
+            btnNext.Visibility =
+                Visibility.Collapsed;
+
+
+
+            if (score >= 8)
+            {
+
+                txtOutput.Text =
+                "Excellent work! You're a cybersecurity pro!";
+
+            }
+
+            else if (score >= 5)
+            {
+
+                txtOutput.Text =
+                "Good job! Keep learning to stay safe online.";
+
+            }
+
+            else
+            {
+
+                txtOutput.Text =
+                "Keep practicing cybersecurity skills to improve.";
+
+            }
+
+        }
     }
 }

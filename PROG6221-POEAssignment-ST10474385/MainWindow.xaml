@@ -8,7 +8,7 @@
 
     <Grid Margin="20">
 
-        <StackPanel>
+        <StackPanel Margin="0,0,0,-81">
 
             <!-- ASCII Title -->
             <Border Background="#2D2D30"
@@ -31,7 +31,7 @@
  / ___ \ | |   / ___ \ (_| (__| \__ \ | |_ 
 /_/   \_\___| /_/   \_\___\___|_|___/  \__|
 
-              AI Assistant"/>
+              AI Assist"/>
             </Border>
 
             <!-- Name Input -->
@@ -85,6 +85,12 @@
                         Margin="5"
                         Click="Cyber_Click"/>
 
+                <Button x:Name="btnQuiz" Content="Cyber Quiz"
+                        Width="180"
+                        Height="40"
+                        Margin="5"
+                        Click="Quiz_Click"/>
+
             </WrapPanel>
 
             <!-- Cybersecurity Buttons -->
@@ -117,6 +123,48 @@
                             Click="Browsing_Click"/>
 
                 </WrapPanel>
+            </StackPanel>
+
+            <!-- Cybersecurity Quiz -->
+
+            <StackPanel x:Name="QuizPanel"
+            Visibility="Collapsed"
+            Margin="0,20,0,0">
+
+                <TextBlock Text="Cybersecurity Mini Quiz"
+               Foreground="Yellow"
+               FontSize="20"
+               Margin="0,0,0,15"/>
+
+
+                <TextBlock x:Name="txtQuizQuestion"
+               Foreground="White"
+               FontSize="16"
+               TextWrapping="Wrap"
+               Margin="0,0,0,15"/>
+
+
+                <StackPanel x:Name="AnswerPanel">
+
+
+                </StackPanel>
+
+
+                <Button x:Name="btnNext"
+            Content="Next Question"
+            Width="150"
+            Height="35"
+            Margin="0,15,0,0"
+            Click="NextQuestion_Click"
+            Visibility="Collapsed"/>
+
+
+                <TextBlock x:Name="txtScore"
+               Foreground="Aqua"
+               FontSize="16"
+               Margin="0,15,0,0"/>
+
+
             </StackPanel>
 
             <!-- Keyword Recognition -->
